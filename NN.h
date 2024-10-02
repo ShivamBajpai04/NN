@@ -31,8 +31,9 @@ void mat_fill(Mat m, float val);         // fill the matrix with val
 void mat_rand(Mat m, float s, float e);  // randomize the matrixx
 void mat_dot(Mat a, Mat b, Mat dest);    // dest is output, and a and b are operands; No memory allocation outside of mat_alloc()
 void mat_sum(Mat dest, Mat b);           // add two matrices
-void mat_print(Mat m);                   // print the contents of the matrix
-#endif                                   // NN_H_
+void mat_print(Mat m, const char *name); // print the contents of the matrix
+#define MAT_PRINT(m) mat_print(m, #m)
+#endif // NN_H_
 
 #ifdef NN_IMPLEMENTATION
 
@@ -81,16 +82,18 @@ void mat_sum(Mat dest, Mat b)
         }
     }
 }
-void mat_print(Mat m)
+void mat_print(Mat m, const char *name)
 {
+    printf("%s : [\n", name);
     for (size_t i = 0; i < m.rows; ++i)
     {
         for (size_t j = 0; j < m.cols; ++j)
         {
-            printf("%f ", MAT_AT(m, i, j));
+            printf("    %f ", MAT_AT(m, i, j));
         }
         printf("\n");
     }
+    printf("]\n");
 }
 
 void mat_rand(Mat m, float s, float e)
