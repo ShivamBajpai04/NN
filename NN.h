@@ -2,6 +2,7 @@
 #define NN_H_
 #include <stddef.h>
 #include <stdio.h>
+#include <math.h>
 
 #ifndef NN_MALLOC
 #include <stdlib.h>
@@ -24,6 +25,7 @@ typedef struct
 
 #define MAT_AT(m, i, j) (m).data[(i) * (m).cols + (j)]
 
+float sigmoidf(float x);
 float rand_float(void);
 
 Mat mat_alloc(size_t rows, size_t cols); // allocate memory to the matrix dynamically
@@ -32,10 +34,16 @@ void mat_rand(Mat m, float s, float e);  // randomize the matrixx
 void mat_dot(Mat a, Mat b, Mat dest);    // dest is output, and a and b are operands; No memory allocation outside of mat_alloc()
 void mat_sum(Mat dest, Mat b);           // add two matrices
 void mat_print(Mat m, const char *name); // print the contents of the matrix
+void mat_sigmoid(Mat m);
 #define MAT_PRINT(m) mat_print(m, #m)
 #endif // NN_H_
 
 #ifdef NN_IMPLEMENTATION
+
+float sigmoidf(float x)
+{   
+    return 1.f / (1.f + expf(-x));
+}
 
 float rand_float()
 {
@@ -114,6 +122,16 @@ void mat_fill(Mat m, float val)
         for (size_t j = 0; j < m.cols; ++j)
         {
             MAT_AT(m, i, j) = val;
+        }
+    }
+}
+
+void mat_sigmoid(Mat m){
+    for (size_t i = 0; i < m.rows; ++i)
+    {
+        for (size_t j = 0; j < m.cols; ++j)
+        {
+            MAT_AT(m, i, j) = sigmoidf(MAT_AT(m,i,j));
         }
     }
 }

@@ -75,11 +75,19 @@ int main()
 
     for (int i = 0; i < 10000; i++)
     {
-        printf("weight: %f, bias: %f, cost: %f\n", w, bias, cost(w, bias));
+        // printf("weight: %f, bias: %f, cost: %f\n", w, bias, cost(w, bias));
         float distanceOfCostforW = (cost(w + eps, bias) - cost(w, bias)) / eps; // finite distance, to approximate the derivative
         float distanceOfCostforBias = (cost(w, bias + eps) - cost(w, bias)) / eps;
         w -= distanceOfCostforW * learningRate;
         bias -= distanceOfCostforBias * learningRate;
+    }
+    //print results
+    printf("weight: %f, bias: %f, cost: %f\n", w, bias, cost(w, bias));
+    //for loop to show that model works on data
+    for (int i = 0; i < TRAIN_SIZE; i++)
+    {
+        float res = train[i][0] * w + bias;
+        printf("finite distance: %f, derivative: %f\n", res, derivativeCost(w));
     }
 
     // for 10k epochs without bias
@@ -102,8 +110,7 @@ int main()
     // for (int i = 0; i < TRAIN_SIZE; i++)
     // {
     //     float res1 = train[i][0] * w - train[i][1];
-    //     float res2 = train[i][0] * w1 - train[i][1];
-    //     printf("finite distance: %f, derivative: %f\n", res1, res2);
+    //     printf("finite distance: %f, derivative: %f\n", res1);
     // }
 
     return 0;
